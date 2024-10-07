@@ -297,7 +297,7 @@ startCli(): void {
         },
       ])
       .then((answers) => {
-        const truck = new Truck{
+        const truck = new Truck(
           Cli.generateVin(),
           answers.color,
           answers.make,
@@ -311,8 +311,8 @@ startCli(): void {
             new Wheel(),
             new Wheel(),
           ],
-          parseInt(answers.towingCapacity),
-        }
+          parseInt(answers.towingCapacity)
+        );
         // TODO: Use the answers object to pass the required properties to the Truck constructor
         // TODO: push the truck to the vehicles array
         // TODO: set the selectedVehicleVin to the vin of the truck
