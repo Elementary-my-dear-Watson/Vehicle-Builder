@@ -15,6 +15,28 @@ class Cli {
   selectedVehicleVin: string | undefined;
   exit: boolean = false;
 
+// method to start the cli
+startCli(): void {
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        name: 'CreateOrSelect',
+        message:
+          'Would you like to create a new vehicle or perform an action on an existing vehicle?',
+        choices: ['Create a new vehicle', 'Select an existing vehicle'],
+      },
+    ])
+    .then((answers) => {
+      // check if the user wants to create a new vehicle or select an existing vehicle
+      if (answers.CreateOrSelect === 'Create a new vehicle') {
+        this.createVehicle();
+      } else {
+        this.chooseVehicle();
+      }
+    });
+}
+
   // method to perform actions on a vehicle
   performActions(): void {
     inquirer
@@ -499,27 +521,7 @@ class Cli {
       });
   }
 
-  // method to start the cli
-  startCli(): void {
-    inquirer
-      .prompt([
-        {
-          type: 'list',
-          name: 'CreateOrSelect',
-          message:
-            'Would you like to create a new vehicle or perform an action on an existing vehicle?',
-          choices: ['Create a new vehicle', 'Select an existing vehicle'],
-        },
-      ])
-      .then((answers) => {
-        // check if the user wants to create a new vehicle or select an existing vehicle
-        if (answers.CreateOrSelect === 'Create a new vehicle') {
-          this.createVehicle();
-        } else {
-          this.chooseVehicle();
-        }
-      });
-  }
+  
 }
 
 // export the Cli class
