@@ -15,9 +15,109 @@ class Cli {
   selectedVehicleVin: string | undefined;
   exit: boolean = false;
 
+  // method to perform actions on a vehicle
+  performActions(): void {
+    inquirer
+      .prompt([
+        {
+          type: 'list',
+          name: 'action',
+          message: 'Select an action',
+          // TODO: add options to tow and wheelie
+          choices: [
+            'Print details',
+            'Start vehicle',
+            'Accelerate 5 MPH',
+            'Decelerate 5 MPH',
+            'Stop vehicle',
+            'Turn right',
+            'Turn left',
+            'Reverse',
+            'Select or create another vehicle',
+            'Exit',
+          ],
+        },
+      ])
+      .then((answers) => {
+        // perform the selected action
+        if (answers.action === 'Print details') {
+          // find the selected vehicle and print its details
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].printDetails();
+            }
+          }
+        } else if (answers.action === 'Start vehicle') {
+          // find the selected vehicle and start it
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].start();
+            }
+          }
+        } else if (answers.action === 'Accelerate 5 MPH') {
+          // find the selected vehicle and accelerate it by 5 MPH
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].accelerate(5);
+            }
+          }
+        } else if (answers.action === 'Decelerate 5 MPH') {
+          // find the selected vehicle and decelerate it by 5 MPH
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].decelerate(5);
+            }
+          }
+        } else if (answers.action === 'Stop vehicle') {
+          // find the selected vehicle and stop it
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].stop();
+            }
+          }
+        } else if (answers.action === 'Turn right') {
+          // find the selected vehicle and turn it right
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].turn('right');
+            }
+          }
+        } else if (answers.action === 'Turn left') {
+          // find the selected vehicle and turn it left
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].turn('left');
+            }
+          }
+        } else if (answers.action === 'Reverse') {
+          // find the selected vehicle and reverse it
+          for (let i = 0; i < this.vehicles.length; i++) {
+            if (this.vehicles[i].vin === this.selectedVehicleVin) {
+              this.vehicles[i].reverse();
+            }
+          }
+        }
+        // TODO: add statements to perform the tow action only if the selected vehicle is a truck. Call the findVehicleToTow method to find a vehicle to tow and pass the selected truck as an argument. After calling the findVehicleToTow method, you will need to return to avoid instantly calling the performActions method again since findVehicleToTow is asynchronous.
+        // TODO: add statements to perform the wheelie action only if the selected vehicle is a motorbike
+        else if (answers.action === 'Select or create another vehicle') {
+          // start the cli to return to the initial prompt if the user wants to select or create another vehicle
+          this.startCli();
+          return;
+        } else {
+          // exit the cli if the user selects exit
+          this.exit = true;
+        }
+        if (!this.exit) {
+          // if the user does not want to exit, perform actions on the selected vehicle
+          this.performActions();
+        }
+      });
+  }
+
   // TODO: Update the constructor to accept Truck and Motorbike objects as well
-  constructor(vehicles: (Car)[]) {
+  constructor(vehicles: (Car | Truck | Motorbike)[]) {
     this.vehicles = vehicles;
+    this.performActions = this.performActions.bind(this);
   }
 
   // static method to generate a vin
@@ -113,7 +213,7 @@ class Cli {
           message: 'Enter Top Speed',
         },
       ])
-      .then((answers) => {
+      .then((answers: { [key: string]: any }) => {
         const car = new Car(
           // TODO: The generateVin method is static and should be called using the class name Cli, make sure to use Cli.generateVin() for creating a truck and motorbike as well!
           Cli.generateVin(),
@@ -256,24 +356,20 @@ class Cli {
       .then((answers) => {
         const motorbike = new Motorbike(
           Cli.generateVin(),
-        // TODO: Use the answers object to pass the required properties to the Motorbike constructor
-        answers.color,
-        answers.make,
-        answers.model,
-        parseInt(answers.year),
-        parseInt(answers.weight),
-        parseInt(answers.topSpeed),
-        [
-          new Wheel(parseInt(answers.frontWheelDiameter), answers.frontWheelBrand),
-          new Wheel(parseInt(answers.rearWheelDiameter), answers.rearWheelBrand),
-        ]
-        // TODO: push the motorbike to the vehicles array
-        // TODO: set the selectedVehicleVin to the vin of the motorbike
-        // TODO: perform actions on the motorbike
-      );
-      this.vehicles.push(motorbike);
-      this.selectedVehicleVin = motorbike.vin;
-      this.performActions();
+          answers.color,
+          answers.make,
+          answers.model,
+          parseInt(answers.year),
+          parseInt(answers.weight),
+          parseInt(answers.topSpeed),
+          [
+            new Wheel(parseInt(answers.frontWheelDiameter), answers.frontWheelBrand),
+            new Wheel(parseInt(answers.rearWheelDiameter), answers.rearWheelBrand),
+          ]
+        );
+        this.vehicles.push(motorbike);
+        this.selectedVehicleVin = motorbike.vin;
+        this.performActions();
       });
   }
 
