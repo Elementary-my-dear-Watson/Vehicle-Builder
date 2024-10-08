@@ -25,13 +25,13 @@ npm install
 To begin the program, and build your vehicle, run the following command:
 
 ```
-node index.js
+npm start
 ```
 
 Follow the prompts to enter project details such as Create Vehicle, Make, Model, etc.
 
 ### Demo Video
-[![Watch the demo video](./assets/img/vehicle-builder-thumbnail-A.jpg)]()
+[![Watch the demo video](./assets/img/vehicle-builder-thumbnail-A.jpg)](https://drive.google.com/file/d/1C4Dl9Dov71QbYZ5CS5oI8uznDgVbiT-C/view?usp=drive_link)
 
 This demo shows the program's features, including creating a vehicle and playing a game, based on user inputs. Watch a demo by clicking the image above.
 
